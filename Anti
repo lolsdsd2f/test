@@ -1,0 +1,26 @@
+local Player = game.Players.LocalPlayer
+local Character = Player.Character
+repeat until Player.Backpack
+
+local Folder = game:GetService('ReplicatedStorage'):WaitForChild('AntiCheat')
+local Remotes = {
+	Tooldupe = Folder:WaitForChild('ChildAdded_')
+}
+
+local Whitelist = {}
+
+
+for _, Tool in pairs(Player.Backpack:GetChildren()) do
+	if Tool:IsA('Tool') then
+		table.insert(Whitelist, Tool)
+	end
+end
+
+Player.Backpack.ChildAdded:Connect(function(Child)
+	if Child:IsA('Tool') then
+		local find = table.find(Whitelist, Child)
+		if not find then
+			Player:Kick('Disconnected from AntiCheat [Player ToolDupe]')
+		end
+	end
+end)
